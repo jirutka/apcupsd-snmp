@@ -56,7 +56,7 @@ or if you like numeric OIDs:
 	.1.3.6.1.4.1.318.1.1.1.1.1.1.0 = STRING: "Back-UPS RS 500"
 	.1.3.6.1.4.1.318.1.1.1.1.1.2.0 = STRING: "grid"
 	.1.3.6.1.4.1.318.1.1.1.1.2.1.0 = STRING: "30.j2.I USB FW:j2"
-	.1.3.6.1.4.1.318.1.1.1.1.2.3.0 = STRING: "BB0314005158"
+	.1.3.6.1.4.1.318.1.1.1.1.2.3.0 = STRING: "BB0314005xxx"
 	.1.3.6.1.4.1.318.1.1.1.2.1.2.0 = Timeticks: (0) 0:00:00.00
 	.1.3.6.1.4.1.318.1.1.1.2.1.3.0 = STRING: "2009-02-26"
 	.1.3.6.1.4.1.318.1.1.1.2.2.1.0 = Gauge32: 100
@@ -104,7 +104,7 @@ Feel free to contribute! I don't intend to work on it.
 ## Important notes
 
 * Download PowerNet (APC) MIB file: 
-[http://www.michaelfmcnamara.com/files/mibs/powernet401.mib](powernet401.mib).
+[powernet401.mib](http://www.michaelfmcnamara.com/files/mibs/powernet401.mib).
 
 * I'm not skilled Perl programmer, this is my first Perl script I ever wrote.
 So if you find something weird in it, please let me know about it and fix it.
