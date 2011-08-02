@@ -87,7 +87,7 @@ You can also query only one OID:
 	PowerNet-MIB::upsAdvBatteryRunTimeRemaining.0 = Timeticks: (190200) 0:31:42.00
 	
 
-## What can by improved
+## What can be improved
 
 * Reimplement snmp_handler to correctly support walking through subtrees of 
 .1.3.6.1.4.1.318.1.1.1 (e.g. .1.3.6.1.4.1.318.1.1.1.2). Currently it can 
@@ -98,7 +98,7 @@ my APC Back-UP RS 500.
 
 * Implement support for setting values and traps.
 
-Feel free to contribute! I don't intend to work on it.
+*Feel free to contribute!* I have no intention in future development.
 
 
 ## Important notes
