@@ -53,7 +53,6 @@ BEGIN {
     $agent || die "No \$agent defined\n";
 }
 
-use feature ('switch');
 use NetSNMP::OID (':all');
 use NetSNMP::agent (':all');
 use NetSNMP::ASN (':all');
@@ -218,8 +217,9 @@ foreach my $oid (&oid_lex_sort(keys(%data))) {
 $reg_oid = new NetSNMP::OID($base_oid);
 
 # Register in the master agent we're embedded in.
+my $agent = new NetSNMP::agent();
 $agent->register('mod_apcupsd', $reg_oid, \&snmp_handler);
-print STDERR "Registering at $base_oid \n" if ($debugging);
+print STDERR "Registering at $reg_oid \n" if ($debugging);
 
 
 
@@ -275,41 +275,43 @@ sub convert_value {
     }
 
     # Convert other values according to their data type in MIB
-    given ($oid_type{$oid}) {
-        when ([ASN_INTEGER]) {
+    if ($oid_type{$oid} == ASN_INTEGER) 
+	{
             return ($raw =~ /(\d+)/g)[0];
         }
-        when ([ASN_GAUGE]) {
+    elsif ($oid_type{$oid} == ASN_GAUGE) 
+	{
             return ($raw =~ /(\d+(?:\.\d+)?)/g)[0];
         }
-        when ([ASN_TIMETICKS]) {
+    elsif ($oid_type{$oid} == ASN_TIMETICKS) 
+	{
             my ($val, $unit) = ($raw =~ /(\d+(?:\.\d+)?)\s+(\w+)/g);
             return &convert_time($val, $unit);
         }
-        default { 
+    else
+        { 
             return $raw;
         }
-    }
+    
 }
 
 # Convert time in given unit (seconds, minutes or hours) to miliseconds.
 sub convert_time {
     my ($val, $unit) = @_;
 
-    given ($unit) {
-        when (m/^seconds/i) { 
+    if ($unit == (m/^seconds/i)) { 
             return $val * 100; 
-        }
-        when (m/^minutes/i) { 
+         }
+    elsif ($unit == (m/^minutes/i)) { 
             return $val * 6000; 
         }
-        when (m/^hours/i) { 
+    elsif ($unit == (m/^hours/i)) { 
             return $val * 360000; 
         }
-        default {
+    else {
             return $val;
         }
-    }
+    
 }
 
 
@@ -353,14 +355,25 @@ sub snmp_handler {
 
         # Mode GETNEXT (for walking)
         } elsif ($request_info->getMode() == MODE_GETNEXT) {
-            if (exists($oid_chain{$oid})) {
+	    # Check if the request did not request the trailing .0, add it here
+            if (exists($oid_chain{"$oid.0"})) {
+		# Then the next object in the MIB would be the one with the index
+		my $new_oid = "$oid.0";
+                my $value = $data{$new_oid};
+
+                print STDERR "  Returning next OID $new_oid: $value\n" if ($debugging);
+                $request->setOID($new_oid);
+		
+                $request->setValue($oid_type{$new_oid}, $value);
+
+	    # Check if the request DID include the trailing .0 index
+            } elsif (exists($oid_chain{$oid})) {
                 my $next_oid = $oid_chain{$oid};
                 my $value = $data{$next_oid};
 
-                print STDERR "  Returning next OID $next_oid: $value\n" if ($debugging);
+                print STDERR " Returning next OID $next_oid: $value\n" if ($debugging);
                 $request->setOID($next_oid);
                 $request->setValue($oid_type{$next_oid}, $value);
-
 
             } elsif ($request->getOID() <= $reg_oid) {
                 my $value = $data{$first_oid};
