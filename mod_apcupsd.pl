@@ -101,12 +101,22 @@ my $mapping = [
     ['DWAKE',       '5.2.9.0',  ASN_TIMETICKS],     # upsAdvConfigReturnDelay
     ['DSHUTD',      '5.2.10.0', ASN_TIMETICKS],     # upsAdvConfigShutoffDelay
     ['STESTI',      '7.2.1.0',  ASN_INTEGER],       # upsAdvTestDiagnosticSchedule
-    ['SELFTEST',    '7.2.3.0',  ASN_INTEGER]        # upsAdvTestDiagnosticsResults //according to apcstatus.c, or date and time of last self test according to manual?!
+    ['SELFTEST',    '7.2.3.0',  ASN_INTEGER],       # upsAdvTestDiagnosticsResults //according to apcstatus.c, or date and time of last self test according to manual?!
+    ['STATUS',      '4.1.1.0',  ASN_INTEGER]        # upsBasicOutputStatus
 ];
 
 # Maps apcupsd values to enum types according to MIB.
 # Mainly based on apcupsd sources (apcstatus.c, drv_powernet.c) and PowerNet MIB.
 my %enums = (
+    # STATUS => upsBasicOutputStatus
+    "$base_oid.4.1.1.0" => {
+        'UNKNOWN' => 1,   # unknown
+        'ONLINE'  => 2,   # onLine
+        'ONBATT'  => 3,   # onBattery
+        'BOOST'   => 4,   # onSmartBoost
+        'TRIM'    => 12,  # onSmartTrim
+    },
+
     # SELFTEST => upsAdvTestDiagnosticsResults
     "$base_oid.7.2.3.0" => {
         'OK'    => 1,   # ok
@@ -159,7 +169,7 @@ my %enums = (
     }
 );
 
-# TODO upsBasicBatteryStatus, upsBasicOutputStatus, NOMPOWER
+# TODO upsBasicBatteryStatus, NOMPOWER
 
 
 
