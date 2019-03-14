@@ -75,7 +75,7 @@ my $base_oid = '.1.3.6.1.4.1.318.1.1.1';
 # OIDs mapping
 my $mapping = [
 #   Apcupsd name    OID suffix  Data type           OID name
-    ['APCMODEL',    '1.1.1.0',  ASN_OCTET_STR],     # upsBasicIdentModel
+    ['MODEL',       '1.1.1.0',  ASN_OCTET_STR],     # upsBasicIdentModel
     ['UPSNAME',     '1.1.2.0',  ASN_OCTET_STR],     # upsBasicIdentName
     ['FIRMWARE',    '1.2.1.0',  ASN_OCTET_STR],     # upsAdvIdentFirmwareRevision
     ['SERIALNO',    '1.2.3.0',  ASN_OCTET_STR],     # upsAdvIdentSerialNumber
